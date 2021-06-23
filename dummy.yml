@@ -1,0 +1,52 @@
+---    
+- hosts: servera
+  gather_facts: false
+  tasks:
+    - debug:
+        msg: "{{ inventory_hostname }}"
+       
+    - pause:
+       
+- hosts: localhost
+  vars:
+    new_hosts:
+      - servera
+      - serverb
+      - serverc
+  tasks:
+    - debug:
+        var: groups
+       
+    - pause:
+       
+    - add_host:
+        name: "{{ item }}"
+        group: webservers
+        ansible_host: localhost
+        ansible_connection: local
+      loop: "{{ new_hosts }}"
+       
+       
+- hosts: localhost
+  tasks:
+    - debug:
+        var: groups
+       
+    - pause:
+       
+       
+- hosts: servera
+  gather_facts: false
+  tasks:
+    - debug:
+        msg: "{{ inventory_hostname }}"
+       
+    - pause:
+       
+    - meta: refresh_inventory
+       
+       
+- hosts: localhost
+  tasks:
+    - debug:
+        var: groups
